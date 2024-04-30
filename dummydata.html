@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    input[type="number"] {
+        width: 100px;
+        padding: 5px;
+    }
+
+    select {
+        width: 200px;
+        padding: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    #mostrarAlumnos {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/generador.js"></script>
+    <script src="./js/exportador.js"></script>
+
+</head>
+
+<body>
+
+    <p>Número de registros:</p>
+    <input id="noRegistros" type="number" min="1" max="50000" step="0" onkeydown="handleKeyDownForNumericInputs(event)">
+    <p>Apellido1:</p>
+    <select name="" id="ap1">
+        <option value="0" hidden default>Selecciona el lenguaje</option>
+        <option value="1">Ruso</option>
+        <option value="2">Español</option>
+        <option value="3">Chino</option>
+        <option value="4">Frances</option>
+    </select>
+
+    <p>Apellido2:</p>
+    <select name="" id="ap2">
+        <option value="0" hidden default>Selecciona el lenguaje</option>
+        <option value="1">Ruso</option>
+        <option value="2">Español</option>
+        <option value="3">Chino</option>
+        <option value="4">Frances</option>
+    </select>
+    <p>Nombre:</p>
+    <select name="" id="name">
+        <option value="0" hidden default>Selecciona el lenguaje</option>
+        <option value="1">Ruso</option>
+        <option value="2">Español</option>
+        <option value="3">Chino</option>
+        <option value="4">Frances</option>
+    </select>
+
+    <button onclick="generar()" id="botonGenerarDummyData"> Generar Dummy Data</button>
+
+    <script>
+        function generar() {
+            var alumnos = '';
+            var ap1 = document.getElementById("ap1").value;
+            var ap2 = document.getElementById("ap2").value;
+            var name = document.getElementById("name").value;
+            if (ap1 == 0 || ap2 == 0 || name == 0) {
+                return;
+            }
+            const noRegistros = document.getElementById("noRegistros").value;
+            const apellidos = {
+                "1": apellidosRuso,
+                "2": apellidosEspanol,
+                "3": apellidosChino,
+                "4": apellidosFrances
+            };
+            const nombres = {
+                "1": nombresRusos,
+                "2": nombresEspanol,
+                "3": nombresChino,
+                "4": nombresFrances
+            };
+            for (var i = 0; i < noRegistros; i++) {
+                var apellido = apellidos[ap1][Math.floor(Math.random() * apellidos[ap1].length)];
+                var apellido2 = apellidos[ap2][Math.floor(Math.random() * apellidos[ap2].length)];
+                var nombre = nombres[name][Math.floor(Math.random() * nombres[name].length)];
+                var expediente = 222220000 + i;
+
+                alumnos += expediente + ", ";
+                alumnos += apellido + ", ";
+                alumnos += apellido2 + ", ";
+                alumnos += nombre + ", ";
+                alumnos += "a" + expediente + "@correo.com" + ", ";
+                var fechaNacimiento = new Date(1980 + Math.floor(Math.random() * 40), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
+                alumnos += fechaNacimiento.toISOString().slice(0, 10) + "<br>"; // Genera una fecha de nacimiento aleatoria entre 1980 y 2020 en formato MySQL
+            }
+            document.getElementById('btnGenerarFormato').disabled = false;
+            document.getElementById("mostrarAlumnos").innerHTML = alumnos;
+        }
+    </script>
+
+    <select name="" id="generarFormato">
+        <option value="0" hidden default>Selecciona el formato</option>
+        <option value="csv">CSV</option>
+        <option value="json">JSON</option>
+        <option value="sql">SQL</option>
+        <option value="xml">XML</option>
+    </select>
+
+    <button id="btnGenerarFormato" onclick="eleccion()" disabled>Generar formato</button>
+    <p id="mostrarAlumnos"> </p>
+
+</body>
+
+</html>
